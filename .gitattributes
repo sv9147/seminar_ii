@@ -1,0 +1,2 @@
+/koda_kalkulator/screenshot_current.png filter=lfs diff=lfs merge=lfs -text
+/koda_kalkulator/yolov3_training_last.weights filter=lfs diff=lfs merge=lfs -text
