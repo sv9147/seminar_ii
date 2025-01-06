@@ -10,6 +10,7 @@ from intersection_of_bubbles import *
 
 import time
 
+
 def countdown(t):
      while t:
         mins, secs = divmod(t, 60)
@@ -17,9 +18,9 @@ def countdown(t):
         #print(timer, end="\r")
         time.sleep(1)
         t -= 1
-       
+
     #print("Time's up!")
-	
+
 window = Tk()
 #window.geometry("500x600")
 window.state('zoomed')
@@ -74,7 +75,7 @@ platno.create_text(1243, 355, anchor=W, text="-",fill='green',  font=('Purisa 80
 platno.create_text(1247, 572, anchor=W, text="*",fill='green',  font=('Purisa 70 bold'))
 platno.create_text(1250, 765, anchor=W, text="/",fill='green',  font=('Purisa 60 bold'))
 
-platno.create_rectangle(100, 300, 500, 600,outline="white", fill="white", width=2)
+platno.create_rectangle(100, 300, 500, 600, outline="white", fill="white", width=2)
 
 platno.create_oval(925, 900, 975, 950, width=3, outline='red', fill='red')
 platno.create_text(937, 925, anchor=W, text="X",fill='white',  font=('Purisa 30 bold'))
@@ -92,33 +93,59 @@ chosen_math_symbol = 0
 
 result = 0
 
+
+tag = ''
+active_tag = ''
+
+
+
 #koda za sledenje
 while 1: 
 
+    x_top = 0
+    y_top = 0
+    x_bottom = 0
+    y_bottom = 0
+    chosen_symbol = ''
+    intersection_match = 0
     window.update()
 
-    #time.sleep(1.5)
-    countdown(2)
+    for x in range(3):
+         
+        time.sleep(1.5)
     
-    
-    screen_img = screen.grab(bounding_box)
+        #countdown(2)
+        
+        screen_img = screen.grab(bounding_box)
 
-    #ponoven zajem zaslona
-    current = pyautogui.screenshot()
-    cv2.imwrite('screenshot_current.png', cv2.cvtColor(np.array(current), cv2.COLOR_RGB2BGR))
-    x_top,y_top,x_bottom,y_bottom = findBubbleArea('screenshot_current.png')
+        #ponoven zajem zaslona
+        current = pyautogui.screenshot()
+        cv2.imwrite('screenshot_current.png', cv2.cvtColor(np.array(current), cv2.COLOR_RGB2BGR))
+        x_top,y_top,x_bottom,y_bottom = findBubbleArea('screenshot_current.png')
 
-    chosen_symbol, intersection_match = intersection(x_top, y_top, x_bottom, y_bottom)
-
-
+        chosen_symbol, intersection_match, active_tag = intersection(x_top, y_top, x_bottom, y_bottom, platno, active_tag)
+        #print('active tag ', active_tag)
+        
+        color_list = ['goldenrod1', 'goldenrod2','goldenrod3','goldenrod4']#'cornflower blue', 'light slate blue', 'blue', 'deep sky blue', 'cyan', 'lawn green', 'yellow', 'red', 'violet red', 'purple', 'DodgerBlue4', 'chocolate2']
+        print(chosen_symbol)
+        
+        
     if intersection_match >= 50: #če je ujemanje vsaj 50% 
+        
         if chosen_symbol == '1': #preverimo kateri simbol je izbran 
             if chosen_math_symbol == 0:
+                
                 first_number = first_number*10 + 1
+                
+                platno.create_arc(600,100, 720,220, style=tk.ARC, width=6, outline='goldenrod3', extent=90, start=180, tag='one')
+                color = random.choice(color_list)#'goldenrod2'#
+                platno.create_arc(600,100, 720,220, style=tk.ARC, width=6, outline='goldenrod4', extent=90, start=270, tag='one')
                 platno.create_text(150, 340, anchor=W, text=str(first_number),fill='green',  font=('Purisa 40 bold'), tag='first_number')
+                
             else: 
                 second_number = second_number*10 + 1
                 platno.create_text(150, 430, anchor=W, text=str(second_number),fill='green',  font=('Purisa 40 bold'), tag='second_number')
+            
         elif chosen_symbol == '2':  
             if chosen_math_symbol == 0:
                 first_number = first_number*10 + 2
@@ -195,54 +222,95 @@ while 1:
 
         elif chosen_symbol == '+': #preverimo kateri simbol je izbran 
             chosen_operation = '+'
-            chosen_math_symbol = 1
+            if chosen_math_symbol == 0: 
+                chosen_math_symbol = 1
+            else: 
+                first_number = str(result)
+                result = 0
+                second_number = 0
+                platno.delete('first_number')
+                platno.delete('second_number')
+                platno.delete('operation')
+                platno.delete('result')
+
+                platno.create_text(150, 340, anchor=W, text=str(first_number),fill='green',  font=('Purisa 40 bold'), tag='first_number')
+
             
             platno.create_text(150, 380, anchor=W, text='+',fill='green',  font=('Purisa 20 bold'), tag='operation')
         elif chosen_symbol == '-': #preverimo kateri simbol je izbran 
             chosen_operation = '-'
-            chosen_math_symbol = 1
+            if chosen_math_symbol == 0: 
+                chosen_math_symbol = 1
+            else: 
+                first_number = str(result)
+                result = 0
+                second_number = 0
+                platno.delete('first_number')
+                platno.delete('second_number')
+                platno.delete('operation')
+                platno.delete('result')
+
+                platno.create_text(150, 340, anchor=W, text=str(first_number),fill='green',  font=('Purisa 40 bold'), tag='first_number')
             
             platno.create_text(150, 380, anchor=W, text='-',fill='green',  font=('Purisa 20 bold'), tag='operation')
         elif chosen_symbol == '*': #preverimo kateri simbol je izbran 
             chosen_operation = '*'
-            chosen_math_symbol = 1
+            if chosen_math_symbol == 0: 
+                chosen_math_symbol = 1
+            else: 
+                first_number = str(result)
+                result = 0
+                second_number = 0
+                platno.delete('first_number')
+                platno.delete('second_number')
+                platno.delete('operation')
+                platno.delete('result')
+
+                platno.create_text(150, 340, anchor=W, text=str(first_number),fill='green',  font=('Purisa 40 bold'), tag='first_number')
             
             platno.create_text(150, 380, anchor=W, text='*',fill='green',  font=('Purisa 20 bold'), tag='operation')
         elif chosen_symbol == '/': #preverimo kateri simbol je izbran 
             chosen_operation = '/'
-            chosen_math_symbol = 1
-           
+            if chosen_math_symbol == 0: 
+                chosen_math_symbol = 1
+            else: 
+                first_number = str(result)
+                result = 0
+                second_number = 0
+                platno.delete('first_number')
+                platno.delete('second_number')
+                platno.delete('operation')
+                platno.delete('result')
+
+                platno.create_text(150, 340, anchor=W, text=str(first_number),fill='green',  font=('Purisa 40 bold'), tag='first_number')
+        
             platno.create_text(150, 380, anchor=W, text='/',fill='green',  font=('Purisa 20 bold'), tag='operation')
         elif chosen_symbol == '=': #izračunamo vnešeno 
             if chosen_operation == '+':
-                result = int(first_number) + int(second_number)
+                result = float(first_number) + float(second_number)
                 
                 
                 platno.create_text(150, 500, anchor=W, text='= '+str(result),fill='green',  font=('Purisa 60 bold'), tag='result')
             if chosen_operation == '-':
-                result = int(first_number) - int(second_number)
+                result = float(first_number) - float(second_number)
                 
                 platno.create_text(150, 500, anchor=W, text='= '+str(result),fill='green',  font=('Purisa 60 bold'), tag='result')
                 
                 
             if chosen_operation == '*':
-                result = int(first_number) * int(second_number)
+                result = float(first_number) * float(second_number)
                 
                 platno.create_text(150, 500, anchor=W, text='= '+str(result),fill='green',  font=('Purisa 60 bold'), tag='result')
-              
+            
                 
             if chosen_operation == '/':
-                result = int(first_number) / int(second_number)
+                result = float(first_number) / float(second_number)
+                result = round(result, 2)
                 
                 platno.create_text(150, 500, anchor=W, text='= '+str(result),fill='green',  font=('Purisa 60 bold'), tag='result')
         elif chosen_symbol == 'X': #preverimo kateri simbol je izbran 
-            #print('we chose x ')
-            exit(1)
             
-                
-
-  
-        
+            exit(1)
 
 window.mainloop()       
         
