@@ -1,0 +1,5 @@
+tk
+numpy
+opencv-python
+mss
+shapely
