@@ -1,9 +1,8 @@
 Koda projekta se nahaja v mapi koda_kalkulator. 
 Za delovanje bomo potrebovali Tobii napravo za sledenje pogleda. 
 Poženemo kodo v datoteki draw.py.
-Mehurček moramo zadržati na izbranem krogu s številko ali operacijo
-par sekund, dokler se izbran simbol ne prikaže v okencu, ki se nahaja 
-na levi strani kalkulatorja. 
+Mehurček moramo zadržati na izbranem krogu s številko ali operacijo, dokler obroba izbranega simbola ni popolnoma obarvana.
+Takrat se bo izbrani simbol prikazal v okencu, ki se nahaja na levi strani kalkulatorja. 
 
 LITERATURA: 
 https://pysource.com/2020/04/02/train-yolo-to-detect-a-custom-object-online-with-free-gpu/
